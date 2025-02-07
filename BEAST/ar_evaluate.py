@@ -93,14 +93,7 @@ def get_generation(ar, x, truncate=None, best=True, min_length=150, max_length=2
         y = ar.tokenizer(inps[i: i+bs], return_tensors='pt', add_special_tokens=False, padding=True).to(0)
         y = ar.model.generate(**y, max_new_tokens =max_length, min_new_tokens =min_length)
         texts = ar.tokenizer.batch_decode(y, skip_special_tokens=True)
-        # print(texts[0].split((ar.chat_format.user[1] + ar.chat_format.assistant[0]).strip(" ")))
-        # texts = [t.split((ar.chat_format.user[1] + ar.chat_format.assistant[0]).strip(" "))[1].strip(" ") for t in texts]
-        text_t = []
-        for t in texts:
-            try:
-                text_t.append(t.split((ar.chat_format.user[1] + ar.chat_format.assistant[0]).strip(" "))[1].strip(" "))
-            except:
-                text_t.append(t.split((ar.chat_format.user[1] + ar.chat_format.assistant[0]).strip(" "))[0].strip(" "))
+        texts = [t.split((ar.chat_format.user[1] + ar.chat_format.assistant[0]).strip(" "))[1].strip(" ") for t in texts]
         texts = [t.split(ar.chat_format.user[0].strip(" "))[0].strip(" ") for t in texts]
         outs.extend(texts)
     print()
