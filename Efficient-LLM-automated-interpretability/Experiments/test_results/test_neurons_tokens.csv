@@ -1,6 +1,6 @@
 ,layer,neuron,explainer,Original,Summary,Highlight,HighlightSummary,AVHS
-0,0,286,gpt-3.5-turbo,2353,932,866,979,1132
-1,10,1838,gpt-3.5-turbo,2378,950,885,1009,1168
-2,20,193,gpt-3.5-turbo,2399,969,889,1021,1181
-3,30,1685,gpt-3.5-turbo,2265,994,901,1076,1588
-4,40,431,gpt-3.5-turbo,2488,971,884,1027,1279
+0,0,286,Meta-Llama-3.1-8B-Instruct,2377,949,887,999,1155
+1,10,1838,Meta-Llama-3.1-8B-Instruct,2409,995,912,1053,1207
+2,20,193,Meta-Llama-3.1-8B-Instruct,2434,985,933,1070,1221
+3,30,1685,Meta-Llama-3.1-8B-Instruct,2290,1025,938,1113,1630
+4,40,431,Meta-Llama-3.1-8B-Instruct,2523,1002,944,1055,1306
