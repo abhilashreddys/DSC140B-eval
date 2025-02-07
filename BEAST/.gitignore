@@ -2,3 +2,5 @@ temp/
 Llama-2-7b
 Llama-2-7b/
 data/
+.ipynb_checkpoints/
+__pycache__
