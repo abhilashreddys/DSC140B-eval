@@ -52,8 +52,8 @@ def exponential_backoff(
     function returns True for the exception, applying exponential backoff with jitter after
     failures, up to a retry limit.
     """
-    init_delay_s = 1.0
-    max_delay_s = 10.0
+    init_delay_s = 5.0
+    max_delay_s = 30.0
     # Roughly 30 minutes before we give up.
     max_tries = 200
     backoff_multiplier = 2.0
@@ -80,7 +80,7 @@ def exponential_backoff(
     return decorate
 
 
-API_KEY = os.getenv("SAMBANOVA_API_KEY")
+API_KEY = "65166591-ac7f-49ff-b0cc-4092e9aa321a"#os.getenv("SAMBANOVA_API_KEY")
 assert API_KEY, "Please set the OPENAI_API_KEY environment variable"
 API_HTTP_HEADERS = {
     "Content-Type": "application/json",
@@ -116,6 +116,19 @@ class ApiClient:
     async def make_request(
         self, timeout_seconds: Optional[int] = None, **kwargs: Any
     ) -> dict[str, Any]:
+        # print(kwargs["messages"])
+        kwargs["messages"] = [
+                {
+                    "role": "user",
+                    "content": kwargs["prompt"]
+                }
+            ]
+        if 'echo' in kwargs:
+            del kwargs['echo']
+        if 'logprobs' in kwargs:
+            del kwargs['logprobs']
+        del kwargs["prompt"]
+        
         if self._cache is not None:
             key = orjson.dumps(kwargs)
             if key in self._cache:
@@ -128,16 +141,48 @@ class ApiClient:
             )
             # If the request has a "messages" key, it should be sent to the /chat/completions
             # endpoint. Otherwise, it should be sent to the /completions endpoint.
-            url = BASE_API_URL + ("/chat/completions" if "messages" in kwargs else "/completions")
+            # url = BASE_API_URL + ("/chat/completions" if "messages" in kwargs else "/completions")
+            url = BASE_API_URL + "/chat/completions"
             kwargs["model"] = self.model_name
+
+            # Debug print
+            # print(f"Request URL: {url}")
+            # print(f"Request payload: {kwargs}")
+            
             response = await http_client.post(url, headers=API_HTTP_HEADERS, json=kwargs)
         # The response json has useful information but the exception doesn't include it, so print it
         # out then reraise.
+        # print(f"Request URL: {url}")
+        # print(f"Request payload: {kwargs}")
+        # print(f"Status code: {response.status_code}")
+        # print(f"Raw response text: {response.text}")
+        # print(f"Headers: {response.headers}")
         try:
             response.raise_for_status()
+            if not response.content:
+                raise ValueError("Empty response received from API")
+                
+            # try:
+            #     response_json = response.json()
+            #     print(f"Parsed response: {response_json}")
+                
+            #     if self._cache is not None:
+            #         self._cache[key] = response_json
+            #     return response_json
+                
+            # except json.JSONDecodeError as json_err:
+            #     print(f"JSON Decode Error: {json_err}")
+            #     print(f"Response content: {response.content}")
+            #     raise
         except Exception as e:
-            print(response.json())
+            # print(f"Request URL: {url}")
+            # print(f"Request payload: {kwargs}")
+            # print(f"Status code: {response.status_code}")
+            # print(f"Raw response text: {response.text}")
+            # print(f"Headers: {response.headers}")
+            # print(response.json())
             raise e
+        # print(response)
         if self._cache is not None:
             self._cache[key] = response.json()
         return response.json()

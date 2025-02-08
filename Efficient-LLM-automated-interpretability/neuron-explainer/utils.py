@@ -2,7 +2,8 @@ import os
 import asyncio
 
 # os.environ["OPENAI_API_KEY"] = open(os.path.join(os.path.expanduser("~"), ".openai_api_key"), "r").read()[:-1]
-os.environ["SAMBANOVA_API_KEY"] = open(os.path.join(os.path.expanduser("~"), ".sambanova_api_key"), "r").read()[:-1]
+# os.environ["SAMBANOVA_API_KEY"] = open(os.path.join(os.path.expanduser("~"), ".sambanova_api_key"), "r").read()[:-1]
+os.environ["SAMBANOVA_API_KEY"] = "fdb0aab4-f0dc-4bc5-b784-e627ac76984c"
 
 from neuron_explainer.activations.activation_records import calculate_max_activation
 from neuron_explainer.activations.activations import ActivationRecordSliceParams, load_neuron
@@ -111,7 +112,7 @@ async def get_explanation(mode = "Summary", neuron_record = None,
     explanation = explanations[0]
     return explanation
 
-async def get_puzzle_explanation(mode = "Summary", explainer_model = "gpt-3.5-turbo", puzzle_activation_record = None):
+async def get_puzzle_explanation(mode = "Summary", explainer_model = "Meta-Llama-3.1-8B-Instruct", puzzle_activation_record = None):
     if mode=="Original":
         explainer = TokenActivationPairExplainer(
             model_name=explainer_model,
@@ -208,8 +209,8 @@ async def get_score(explanation = None, layer = 0, neuron = 1, simulator_model =
 
 @retry(
     retry=retry_if_exception_type((openai.error.APIError, openai.error.APIConnectionError, openai.error.RateLimitError, openai.error.ServiceUnavailableError, openai.error.Timeout)),
-    wait=wait_random_exponential(multiplier=1, max=60),
-    stop=stop_after_attempt(10)
+    wait=wait_random_exponential(multiplier=2, max=60),
+    stop=stop_after_attempt(1)
 )
 def embedding_with_backoff(**kwargs):
     return openai.Embedding.create(**kwargs)
