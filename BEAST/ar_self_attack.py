@@ -16,7 +16,7 @@ parser.add_argument('--length', type=int, default=40)
 parser.add_argument('--model', type=str, default='vicuna7b')
 parser.add_argument('--log', type=int, default=1)
 parser.add_argument('--target', type=int, default=1)
-parser.add_argument('--budget', type=int, help='per sample attack budget in seconds', default=600000)
+parser.add_argument('--budget', type=int, help='per sample attack budget in seconds', default=120)
 parser.add_argument('--DIR', type=str, default='data/')
 parser.add_argument('--begin', type=int, default=0)
 parser.add_argument('--end', type=int, default=100)
@@ -74,7 +74,7 @@ print(params)
 # logger
 Time = []
 try:
-    file = open(os.path.join(args.DIR, f'{name[0]}.pkl'), 'rb')
+    file = open(os.path.join(args.DIR, f"data{args.budget}", f'{name[0]}.pkl'), 'rb')
     Log = pkl.load(file)
     file.close()
     print("Loaded file:", len(Log))
@@ -99,6 +99,6 @@ for i in range(len(Log), len(prompts)):
     Log.update({i: (y, None, Time[-1])})
     
     if args.log == 1:
-        file = open(os.path.join(args.DIR, f'{name[0]}.pkl'), 'wb')
+        file = open(os.path.join(args.DIR, f"data{args.budget}", f'{name[0]}.pkl'), 'wb')
         pkl.dump(Log, file)
         file.close()

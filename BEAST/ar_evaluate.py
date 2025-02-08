@@ -93,7 +93,18 @@ def get_generation(ar, x, truncate=None, best=True, min_length=150, max_length=2
         y = ar.tokenizer(inps[i: i+bs], return_tensors='pt', add_special_tokens=False, padding=True).to(0)
         y = ar.model.generate(**y, max_new_tokens =max_length, min_new_tokens =min_length)
         texts = ar.tokenizer.batch_decode(y, skip_special_tokens=True)
-        texts = [t.split((ar.chat_format.user[1] + ar.chat_format.assistant[0]).strip(" "))[1].strip(" ") for t in texts]
+        # print(texts)
+        # texts = [t.split((ar.chat_format.user[1] + ar.chat_format.assistant[0]).strip(" "))[1].strip(" ") for t in texts]
+        texts2 = []
+        for t in texts:  # Using t_list to avoid variable name conflict
+            # Original split operation attempting to get second element
+            split_text = t.split((ar.chat_format.user[1] + ar.chat_format.assistant[0]).strip(" "))
+            try:
+                texts2.append(split_text[1].strip(" "))
+            except IndexError:
+                # If split doesn't have enough elements, use the first element (index 0)
+                texts2.append(split_text[0].strip(" "))
+        texts = texts2
         texts = [t.split(ar.chat_format.user[0].strip(" "))[0].strip(" ") for t in texts]
         outs.extend(texts)
     print()
@@ -117,10 +128,16 @@ def logger(file_name, asr, acc, inps, outs, log_file):
         print("="*20 + "\n", file=file)
         for i, j in enumerate(acc):
             if j == 1:
-                print("USER:", file=file)
-                print(" ".join(inps[i].split(ar.chat_format.user[0])[1].strip(" ").split()[:-1]), file=file)
-                print("ASSISTANT:", file=file)
-                print(outs[i], file=file)
+                try:
+                    print("USER:", file=file)
+                    print(" ".join(inps[i].split(ar.chat_format.user[0])[1].strip(" ").split()[:-1]), file=file)
+                    print("ASSISTANT:", file=file)
+                    print(outs[i], file=file)
+                except:
+                    print("USER:", file=file)
+                    print(inps[i], file=file)
+                    print("ASSISTANT:", file=file)
+                    print(outs[i], file=file)
                 print("\n " + "*"*10 + "\n", file=file)
                 
 def logger_untargeted(file_name, log_file, ar, x, truncate=40, best=True, ind=0, base_tokenizer=None):
@@ -220,4 +237,4 @@ if __name__ == "__main__":
         outputs.append(outs)
 
     
-    logger(file_name, (All>0).sum() / len(All), acc, inps, outs, "logs/logs.log")
+    logger(file_name, (All>0).sum() / len(All), acc, inps, outs, "logs/logs120/logs.log")
