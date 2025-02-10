@@ -41,7 +41,8 @@ prefixes = [
 files = {'vicuna': "lmsys/vicuna-7b-v1.5", \
         'mistral': "mistralai/Mistral-7B-Instruct-v0.2", \
         'vicuna13b': "lmsys/vicuna-13b-v1.5",
-        'llama2': "./temp"}
+        'llama2': "./temp",
+        'llama2chat': "meta-llama/Llama-2-7b-chat-hf",}
 
 
 @torch.no_grad()
@@ -203,6 +204,7 @@ if __name__ == "__main__":
     parser.add_argument('--clean', type=int, default=0)
     parser.add_argument('--file_name', type=str, default=None)
     parser.add_argument('--total_steps', type=int, default=40)
+    parser.add_argument('--budget', type=int, default=60)
     args = parser.parse_args() 
     total_steps = args.total_steps
     file = args.model
@@ -237,4 +239,4 @@ if __name__ == "__main__":
         outputs.append(outs)
 
     
-    logger(file_name, (All>0).sum() / len(All), acc, inps, outs, "logs/logs120/logs.log")
+    logger(file_name, (All>0).sum() / len(All), acc, inps, outs, f"logs/logs{args.budget}/logs.log")

@@ -16,7 +16,7 @@ parser.add_argument('--length', type=int, default=40)
 parser.add_argument('--model', type=str, default='vicuna7b')
 parser.add_argument('--log', type=int, default=1)
 parser.add_argument('--target', type=int, default=1)
-parser.add_argument('--budget', type=int, help='per sample attack budget in seconds', default=120)
+parser.add_argument('--budget', type=int, help='per sample attack budget in seconds', default=60)
 parser.add_argument('--DIR', type=str, default='data/')
 parser.add_argument('--begin', type=int, default=0)
 parser.add_argument('--end', type=int, default=100)
@@ -47,6 +47,8 @@ elif 'vicuna13b' in args.model.lower():
     name = ['vicuna13b', 'lmsys/vicuna-13b-v1.5']
 elif 'mistral' in args.model.lower():
     name = ['mistral', 'mistralai/Mistral-7B-Instruct-v0.2']
+elif 'llama2chat' in args.model.lower():
+    name = ['llama2chat', "meta-llama/Llama-2-7b-chat-hf"]
 elif 'llama' in args.model.lower():
     name = ['llama2', './temp']
     
