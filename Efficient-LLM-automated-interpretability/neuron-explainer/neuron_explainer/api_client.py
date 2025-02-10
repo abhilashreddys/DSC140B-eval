@@ -80,7 +80,7 @@ def exponential_backoff(
     return decorate
 
 
-API_KEY = "65166591-ac7f-49ff-b0cc-4092e9aa321a"#os.getenv("SAMBANOVA_API_KEY")
+API_KEY = os.getenv("SAMBANOVA_API_KEY")
 assert API_KEY, "Please set the OPENAI_API_KEY environment variable"
 API_HTTP_HEADERS = {
     "Content-Type": "application/json",

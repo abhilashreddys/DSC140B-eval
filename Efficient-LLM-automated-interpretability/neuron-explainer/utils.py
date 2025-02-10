@@ -2,8 +2,10 @@ import os
 import asyncio
 
 # os.environ["OPENAI_API_KEY"] = open(os.path.join(os.path.expanduser("~"), ".openai_api_key"), "r").read()[:-1]
-# os.environ["SAMBANOVA_API_KEY"] = open(os.path.join(os.path.expanduser("~"), ".sambanova_api_key"), "r").read()[:-1]
-os.environ["SAMBANOVA_API_KEY"] = "fdb0aab4-f0dc-4bc5-b784-e627ac76984c"
+try:
+  os.getenv("SAMBANOVA_API_KEY")
+except:
+  os.environ["SAMBANOVA_API_KEY"] = open(os.path.join(os.path.expanduser("~"), ".sambanova_api_key"), "r").read()[:-1]
 
 from neuron_explainer.activations.activation_records import calculate_max_activation
 from neuron_explainer.activations.activations import ActivationRecordSliceParams, load_neuron
