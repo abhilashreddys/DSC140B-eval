@@ -28,7 +28,7 @@ python ar_evaluate.py --model="vicuna" --total_steps=40 --file_name="data/data60
 python ar_self_attack.py --k1=15 --k2=15 --length=40 --model='vicuna7b' --log=1 --target=1 --begin=0 --end=100 --budget=120
 python ar_evaluate.py --model="vicuna" --total_steps=40 --file_name="data/data120/vicuna_k1=15_k2=15_length=40_0_100_ngram=1.pkl"
 
-# mkdir temp_llama_chat
+# mkdir temp
 # git clone https://huggingface.co/meta-llama/Llama-2-7b
 # python convert_llama_weights_to_hf.py --input_dir "Llama-2-7b" --model_size 7B --llama_version 2 --output_dir temp
 python ar_self_attack.py --k1=15 --k2=15 --length=40 --model='llama2chat' --log=1 --target=1 --begin=0 --end=100 --budget=60
