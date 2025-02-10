@@ -21,7 +21,7 @@ cd BEAST/
 mkdir data
 wget https://raw.githubusercontent.com/llm-attacks/llm-attacks/refs/heads/main/data/advbench/harmful_behaviors.csv
 mv harmful_behaviors.csv data/
-https://raw.githubusercontent.com/huggingface/transformers/refs/heads/main/src/transformers/models/llama/convert_llama_weights_to_hf.py
+wget https://raw.githubusercontent.com/huggingface/transformers/refs/heads/main/src/transformers/models/llama/convert_llama_weights_to_hf.py
 
 python ar_self_attack.py --k1=15 --k2=15 --length=40 --model='vicuna7b' --log=1 --target=1 --begin=0 --end=100 --budget=60
 python ar_evaluate.py --model="vicuna" --total_steps=40 --file_name="data/data60/vicuna_k1=15_k2=15_length=40_0_100_ngram=1.pkl"
